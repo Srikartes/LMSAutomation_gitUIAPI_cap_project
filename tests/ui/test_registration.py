@@ -7,9 +7,9 @@ import pytest
 def test_new_registration(page, base_url):
     page.goto(f"{base_url}/register")
     page.fill("#user", "newstudent")
-    page.fill("#email", "student@test.com")
-    page.fill("#pass1", "Pass123!")
-    page.fill("#pass2", "Pass123!")
+    page.fill("#email", "srikar@test.com")
+    page.fill("#pass1", "Test123!")
+    page.fill("#pass2", "Test123!")
     page.click("#reg-btn")
     assert page.locator(".success").is_visible()
 
