@@ -10,7 +10,6 @@ def test_create_course(api_context):
     assert res.status == 201
     assert res.json()["title"] == "API Testing"
 
-
 @pytest.mark.api
 def test_create_invalid_course(api_context):
     payload = {}

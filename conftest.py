@@ -8,30 +8,32 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# QA and Staging environment URLs
+# QA and Staging env  URLs
 ENV = os.getenv("TEST_ENV", "qa").lower()
 SLACK_URL = os.getenv("SLACK_WEBHOOK_URL", "")
 ENV_URLS = {
     "qa": "http://localhost:8001",
     "staging": "http://localhost:8002",
 }
-#course data 
+
+# Course data
 COURSES = [
     {"id": 101, "title": "Python Automation", "category": "Development", "status": "Active"},
     {"id": 102, "title": "Playwright Testing", "category": "QA", "status": "Active"},
 ]
 
-#creating mock server for the URL
+
+# Creating mock server for the URL
 class SimpleMockServer(BaseHTTPRequestHandler):
     def log_message(self, format, *args):
         pass
-
+# For the API
     def send_json(self, code, data):
         self.send_response(code)
         self.send_header("Content-Type", "application/json")
         self.end_headers()
         self.wfile.write(json.dumps(data).encode())
-
+# for the html UI
     def send_html(self, code, html):
         self.send_response(code)
         self.send_header("Content-Type", "text/html")
@@ -50,16 +52,36 @@ class SimpleMockServer(BaseHTTPRequestHandler):
         # UI HTML Pages
         elif self.path == "/login":
             self.send_html(200, """
-                <input id="username" />
-                <input id="password" />
+                <h2>Login</h2>
+                <div>
+                    <label for="username">Username</label>
+                    <input id="username" placeholder="Enter username" />
+                </div>
+                <div>
+                    <label for="password">Password</label>
+                    <input id="password" type="password" placeholder="Enter password" />
+                </div>
                 <button id="login-btn" onclick="document.body.innerHTML+='<div class=error>Invalid credentials</div>'">Login</button>
             """)
         elif self.path == "/register":
             self.send_html(200, """
-                <input id="user" />
-                <input id="email" />
-                <input id="pass1" />
-                <input id="pass2" />
+                <h2>Register</h2>
+                <div>
+                    <label for="user">Username</label>
+                    <input id="user" placeholder="Choose username" />
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input id="email" type="email" placeholder="Enter email" />
+                </div>
+                <div>
+                    <label for="pass1">Password</label>
+                    <input id="pass1" type="password" placeholder="Create password" />
+                </div>
+                <div>
+                    <label for="pass2">Confirm Password</label>
+                    <input id="pass2" type="password" placeholder="Repeat password" />
+                </div>
                 <button id="reg-btn" onclick="
                     let u = document.getElementById('user').value;
                     let p1 = document.getElementById('pass1').value;
@@ -72,18 +94,31 @@ class SimpleMockServer(BaseHTTPRequestHandler):
         elif self.path == "/dashboard":
             self.send_html(200, """
                 <h1 class="welcome">Welcome Student</h1>
-                <div class="course-card">Python Automation <progress class="progress" value="75" max="100"></progress></div>
-                <div class="course-card">Playwright Testing <progress class="progress" value="40" max="100"></progress></div>
+                <div class="course-card">
+                    <label for="prog-101">Python Automation</label>
+                    <progress id="prog-101" class="progress" value="75" max="100"></progress>
+                </div>
+                <div class="course-card">
+                    <label for="prog-102">Playwright Testing</label>
+                    <progress id="prog-102" class="progress" value="40" max="100"></progress>
+                </div>
                 <a id="profile-link" href="/profile">Profile</a>
                 <button id="logout-btn" onclick="window.location.href='/login'">Logout</button>
             """)
         elif self.path == "/courses":
             self.send_html(200, """
-                <input id="search" onkeydown="if(event.key==='Enter') document.getElementById('c2').style.display='none'" />
-                <select id="category" onchange="document.getElementById('c1').style.display='none'">
-                    <option value="all">All</option>
-                    <option value="qa">QA</option>
-                </select>
+                <h2>Courses</h2>
+                <div>
+                    <label for="search">Search Courses</label>
+                    <input id="search" placeholder="Type and press Enter" onkeydown="if(event.key==='Enter') document.getElementById('c2').style.display='none'" />
+                </div>
+                <div>
+                    <label for="category">Filter by Category</label>
+                    <select id="category" onchange="document.getElementById('c1').style.display='none'">
+                        <option value="all">All</option>
+                        <option value="qa">QA</option>
+                    </select>
+                </div>
                 <div id="c1"><a class="course-link" href="/course/101">Python Automation</a></div>
                 <div id="c2"><a class="course-link" href="/course/102">Playwright Testing</a></div>
                 <button class="enroll-btn" onclick="document.body.innerHTML+='<div class=toast>Enrolled</div>'">Enroll</button>
@@ -92,9 +127,19 @@ class SimpleMockServer(BaseHTTPRequestHandler):
             self.send_html(200, "<h1 class='details'>Course Details: Python Automation</h1>")
         elif self.path == "/profile":
             self.send_html(200, """
-                <input id="name" />
-                <input id="email" />
-                <input id="password" />
+                <h2>User Profile</h2>
+                <div>
+                    <label for="name">Full Name</label>
+                    <input id="name" placeholder="Enter your name" />
+                </div>
+                <div>
+                    <label for="email">Email Address</label>
+                    <input id="email" type="email" placeholder="Enter your email" />
+                </div>
+                <div>
+                    <label for="password">New Password</label>
+                    <input id="password" type="password" placeholder="Enter new password" />
+                </div>
                 <button id="save-btn" onclick="document.body.innerHTML+='<div class=success>Profile Updated</div>'">Save</button>
             """)
 

@@ -169,3 +169,70 @@ TEST_ENV=staging pytest
   ```bash
   playwright show-trace reports/traces/<test_name>_trace.zip
   ```
+----
+## Test Data UI
+
+class TestData:
+    VALID_USER = ("srikar", "Test123!")
+
+    INVALID_USERS = [
+        ("wrong_user", "Test123!"),
+        ("srikar", "wrong_pass"),
+        ("", "Test123!"),
+        ("srikar", ""),
+    ]
+
+
+-----
+
+## Testdata API
+# Course data
+COURSES = [
+    {"id": 101, "title": "Python Automation", "category": "Development", "status": "Active"},
+    {"id": 102, "title": "Playwright Testing", "category": "QA", "status": "Active"},
+]
+
+-------
+## Output Result:
+
+pytest --headed --slowmo 5000 -n 0                          
+============================= test session starts ==============================
+platform win32 -- Python 3.13.2, pytest-9.1.1, pluggy-1.7.0 -- C:\Python313\python.exe
+cachedir: .pytest_cache
+metadata: {'Python': '3.13.2', 'Platform': 'Windows-11-10.0.26300-SP0', 'Packages': {'pytest': '9.1.1', 'pluggy': '1.7.0'}, 'Plugins': {'allure-pytest': '2.16.2', 'html': '4.2.0', 'metadata': '3.1.1', 'playwright': '0.10.0', 'rerunfailures': '16.7', 'xdist': '3.8.0'}}
+rootdir: C:\LMSAutomation
+configfile: pytest.ini
+testpaths: tests
+plugins: allure-pytest-2.16.2, html-4.2.0, metadata-3.1.1, playwright-0.10.0, rerunfailures-16.7, xdist-3.8.0
+collected 26 items                                                              
+
+tests/api/test_create_course.py::test_create_course PASSED                [  3%]
+tests/api/test_create_course.py::test_create_invalid_course PASSED        [  7%]
+tests/api/test_delete_course.py::test_delete_course PASSED                [ 11%]
+tests/api/test_delete_course.py::test_get_course_by_id PASSED             [ 15%]
+tests/api/test_get_courses.py::test_get_all_courses PASSED                [ 19%]
+tests/api/test_get_courses.py::test_get_invalid_course PASSED             [ 23%]
+tests/api/test_update_course.py::test_put_course PASSED                   [ 26%]
+tests/api/test_update_course.py::test_patch_course PASSED                 [ 30%]
+tests/ui/test_courses.py::test_search_course[chromium] PASSED             [ 34%]
+tests/ui/test_courses.py::test_filter_courses[chromium] PASSED            [ 38%]
+tests/ui/test_courses.py::test_open_course_details[chromium] PASSED       [ 42%]
+tests/ui/test_enrollment.py::test_enroll_course[chromium] PASSED          [ 46%]
+tests/ui/test_enrollment.py::test_duplicate_enrollment[chromium] PASSED   [ 50%]
+tests/ui/test_login.py::test_valid_login[chromium] PASSED                 [ 53%]
+tests/ui/test_login.py::test_invalid_login[chromium-wrong_user-Pass123!] PASSED [ 57%]
+tests/ui/test_login.py::test_invalid_login[chromium-student1-wrong_pass] PASSED [ 61%]
+tests/ui/test_login.py::test_invalid_login[chromium--Pass123!] PASSED     [ 65%]
+tests/ui/test_login.py::test_invalid_login[chromium-student1-] PASSED     [ 69%]
+tests/ui/test_login.py::test_logout[chromium] PASSED                      [ 73%]
+tests/ui/test_profile.py::test_update_profile[chromium] PASSED            [ 76%]
+tests/ui/test_profile.py::test_page_navigation[chromium] PASSED           [ 80%]
+tests/ui/test_profile.py::test_dashboard_courses[chromium] PASSED         [ 84%]
+tests/ui/test_profile.py::test_dashboard_progress[chromium] PASSED        [ 88%]
+tests/ui/test_registration.py::test_new_registration[chromium] PASSED     [ 92%]
+tests/ui/test_registration.py::test_mandatory_fields[chromium] PASSED     [ 96%]
+tests/ui/test_registration.py::test_password_mismatch[chromium] PASSED    [100%]
+
+----- Generated html report: file:///C:/LMSAutomation/reports/report.html ------
+======================== 26 passed in 304.33s (0:05:04) ========================
+
